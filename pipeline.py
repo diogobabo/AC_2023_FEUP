@@ -42,9 +42,9 @@ df = pd.DataFrame(data, columns=[
 
 df.to_csv('data.csv', index=False)
 
-teams_df = pd.read_csv('teams.csv')
-players_df = pd.read_csv('players.csv')
-players_teams_df = pd.read_csv('players_teams.csv')
+teams_df = pd.read_csv('Dataset/teams.csv')
+players_df = pd.read_csv('Dataset/players.csv')
+players_teams_df = pd.read_csv('Dataset/players_teams.csv')
 
 merged_df = teams_df.merge(players_teams_df, on=['year', 'tmID'], how='inner')
 
