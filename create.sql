@@ -60,7 +60,23 @@ CREATE TABLE teams(
 					  min INTEGER,
 					  attend INTEGER,
 					  arena VARCHAR(255),
-					  CONSTRAINT PK_teams PRIMARY KEY (year, tmID)
+					  CONSTRAINT PK_TEAMS PRIMARY KEY (year, tmID)
+);
+
+CREATE TABLE coaches(
+    coachID VARCHAR(255),
+    year INTEGER,
+    tmID VARCHAR(255),
+    lgID VARCHAR(255),
+    stint INTEGER,
+    won INTEGER,
+    lost INTEGER,
+    post_wins INTEGER,
+    post_losses INTEGER,
+
+    CONSTRAINT FOREIGNKEY_year FOREIGN KEY (year) REFERENCES teams(year) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGNKEY_tmID FOREIGN KEY (tmID) REFERENCES teams(tmID) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT PK_coaches PRIMARY KEY (coachID, stint, year, tmID)
 );
 
 CREATE TABLE players(
@@ -76,28 +92,10 @@ CREATE TABLE players(
     deathDate VARCHAR(255)
 );
 
-CREATE TABLE awards_players(
-    playerID VARCHAR(255) FOREIGN KEY REFERENCES players(bioId) ON DELETE CASCADE ON UPDATE CASCADE,
-    award VARCHAR(255),
-    year INTEGER,
-    lgID VARCHAR(255),
-);
 
-CREATE TABLE coaches(
-    coachID VARCHAR(255),
-    year INTEGER FOREIGN KEY REFERENCES teams(year) ON DELETE CASCADE ON UPDATE CASCADE,
-    tmID VARCHAR(255) FOREIGN KEY REFERENCES teams(tmID) ON DELETE CASCADE ON UPDATE CASCADE,
-    lgID VARCHAR(255),
-    stint INTEGER,
-    won INTEGER,
-    lost INTEGER,
-    post_wins INTEGER,
-    post_losses INTEGER,
-    CONSTRAINT PK_coaches PRIMARY KEY (coachID, stint, year, tmID)
-);
 
 create table series_post(
-					year INTEGER FOREIGN KEY REFERENCES teams(year) ON DELETE CASCADE ON UPDATE CASCADE,
+					year INTEGER,
 					round VARCHAR(255), 
 					series VARCHAR(255), 
 					tmIDWinner VARCHAR(255),
@@ -107,13 +105,14 @@ create table series_post(
 					W INTEGER,
 					L INTEGER,
 
+					CONSTRAINT FOREIGNKEY_year FOREIGN KEY (year) REFERENCES teams(year) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create table players_teams(
-					playerID VARCHAR(255) REFERENCES players(bioID) ON DELETE CASCADE ON UPDATE CASCADE,
-					year INTEGER FOREIGN KEY REFERENCES teams(year) ON DELETE CASCADE ON UPDATE CASCADE,
+					playerID VARCHAR(255),
+					year INTEGER, 
 					stint INTEGER, 
-					tmID VARCHAR(255) FOREIGN KEY REFERENCES teams(tmID) ON DELETE CASCADE ON UPDATE CASCADE,
+					tmID VARCHAR(255),
 					lgID VARCHAR(255),
 					GP INTEGER,
 					GS INTEGER,
@@ -127,9 +126,9 @@ create table players_teams(
 					blocks INTEGER,
 					turnovers INTEGER,
 					PF INTEGER,
-					fAttempted INTEGER,
+					fgAttempted INTEGER,
 					fgMade INTEGER,
-					ftattempted INTEGER,
+					ftAttempted INTEGER,
 					ftMade INTEGER,
 					threeAttempted INTEGER,
 					threeMade INTEGER,
@@ -153,14 +152,32 @@ create table players_teams(
 					PostthreeAttempted INTEGER,
 					PostthreeMade INTEGER,
 					PostDQ INTEGER,
+
+
+					CONSTRAINT FOREIGNKEY_year FOREIGN KEY (year) REFERENCES teams(year) ON DELETE CASCADE ON UPDATE CASCADE,
+					CONSTRAINT FOREIGNKEY_playerID FOREIGN KEY (playerID) REFERENCES players(bioID) ON DELETE CASCADE ON UPDATE CASCADE,
+					CONSTRAINT FOREIGNKEY_tmID FOREIGN KEY (tmID) REFERENCES teams(tmID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE teams_post(
-    year INTEGER FOREIGN KEY REFERENCES teams(year) ON DELETE CASCADE ON UPDATE CASCADE,
-    tmID VARCHAR(255) FOREIGN KEY REFERENCES teams(tmID) ON DELETE CASCADE ON UPDATE CASCADE,
+    year INTEGER,
+    tmID VARCHAR(255),
     lgID VARCHAR(255),
     W INTEGER,
     L INTEGER,
+
+    CONSTRAINT FOREIGNKEY_year FOREIGN KEY (year) REFERENCES teams(year) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGNKEY_tmID FOREIGN KEY (tmID) REFERENCES teams(tmID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE awards_players(
+    playerID VARCHAR(255),
+    award VARCHAR(255),
+    year INTEGER,
+    lgID VARCHAR(255),
+
+    CONSTRAINT FOREIGNKEY_playerID FOREIGN KEY (playerID) REFERENCES players(bioId) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
